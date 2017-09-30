@@ -1,4 +1,4 @@
-package gles
+package scalagl.gl
 
 trait GLES2 {
 

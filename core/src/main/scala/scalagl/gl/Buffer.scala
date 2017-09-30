@@ -1,4 +1,4 @@
-package gles
+package scalagl.gl
 
 import scala.reflect._
 import scala.annotation.switch

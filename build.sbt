@@ -11,12 +11,12 @@ lazy val commonSettings = Seq(
 )
 
 lazy val core = (project in file("core"))
-  .settings(name := "scala-gles-core")
+  .settings(name := "scalagl-core")
   .settings(commonSettings)
 
 lazy val jogl = (project in file("jogl"))
   .settings(
-    name := "scala-gles-jogl",
+    name := "scalagl-jogl",
     resolvers += MavenRepository("jogamp", "http://jogamp.org/deployment/maven"),
     libraryDependencies += "org.jogamp.jogl" % "jogl-all-main" % "2.3.2",
     libraryDependencies += "org.jogamp.gluegen" % "gluegen-rt-main" % "2.3.2")
