@@ -4,7 +4,7 @@ import com.jogamp.opengl._
 import com.jogamp.opengl.awt._
 
 object AWTClient {
-  def register(frame: java.awt.Frame, mkRenderer: gl.GLES2 => Renderer): Unit = {
+  def register(frame: java.awt.Frame, mkRenderer: gl.GLES2 => Renderer): java.awt.Canvas = {
     val profile = GLProfile.getDefault()
     val capabilities = new GLCapabilities(profile)
     val canvas = new GLCanvas(capabilities)
@@ -40,5 +40,7 @@ object AWTClient {
         renderer.display()
       }
     })
+
+    canvas
   }
 }
