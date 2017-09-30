@@ -1,2 +1,3 @@
-# scala-gles
-Cross-platform bindings for OpenGL ES
+# scalagl
+
+Cross-platform bindings for OpenGL ES 2.0
