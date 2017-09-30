@@ -2,7 +2,7 @@ package scalagl.gl
 
 import scala.reflect._
 
-class JOGLES2(private[this] val gl: com.jogamp.opengl.GLES2) extends GLES2 {
+class JOGLES2(private[scalagl] var gl: com.jogamp.opengl.GLES2) extends GLES2 {
 
   private[this] class ArrayProvider[@specialized(Byte, Int) T : ClassTag] {
     private[this] var array = new Array[T](1024)
