@@ -1,6 +1,6 @@
 package gles
 
-trait GLSpec {
+trait GLES2 {
 
   def glActiveTexture(texture: Int): Unit
 
@@ -45,13 +45,7 @@ trait GLSpec {
   def glCompileShader(shader: Int): Unit
 
   def glCompressedTexImage2D(target: Int, level: Int, format: Int,
-                             width: Int, height: Int, border: Int, imageSize: Int, data: Long): Unit
-
-  def glCompressedTexImage2D(target: Int, level: Int, format: Int,
                              width: Int, height: Int, border: Int, imageSize: Int, data: Buffer[_]): Unit
-
-  def glCompressedTexSubImage2D(target: Int, level: Int, xoffset: Int, yoffset: Int,
-                                width: Int, height: Int, format: Int, imageSize: Int, data: Long): Unit
 
   def glCompressedTexSubImage2D(target: Int, level: Int, xoffset: Int, yoffset: Int,
                                 width: Int, height: Int, format: Int, imageSize: Int, data: Buffer[_]): Unit
@@ -94,9 +88,7 @@ trait GLSpec {
 
   def glDrawArrays(mode: Int, first: Int, count: Int): Unit
 
-  def glDrawElements(mode: Int, count: Int, tpe: Int, indices: Long): Unit
-
-  def glDrawElements(mode: Int, tpe: Int, indices: Buffer[_]): Unit
+  def glDrawElements(mode: Int, count: Int, tpe: Int, indices: Buffer[_]): Unit
 
   def glEnable(cap: Int): Unit
 
@@ -122,7 +114,7 @@ trait GLSpec {
 
   def glGenerateMipmap(target: Int): Unit
 
-  def glGetBooleanv(pname: Int, buffer: Buffer[Boolean]): Unit
+  def glGetBooleanv(pname: Int, buffer: Buffer[Byte]): Unit
 
   def glGetIntv(pname: Int, buffer: Buffer[Int]): Unit
 
@@ -130,17 +122,17 @@ trait GLSpec {
 
   def glGetActiveAttrib(program: Int, index: Int, bufSize: Int): (Int, Int, String)
 
-  def glGetActiveUniform(program: int, index: Int, bufSize: Int): (Int, Int, String)
+  def glGetActiveUniform(program: Int, index: Int, bufSize: Int): (Int, Int, String)
 
   def glGetAttachedShaders(program: Int, buffer: Buffer[Int]): Int
 
   def glGetAttribLocation(program: Int, name: String): Int
 
-  def glGetBufferParameteriv(target: Int, value: Int): Int
+  def glGetBufferParameteriv(target: Int, value: Int, buffer: Buffer[Int]): Unit
 
   def glGetError(): Int
 
-  def glGetFramebufferAttachmentParameteriv(target: Int, attachment: Int, pname: Int): Int
+  def glGetFramebufferAttachmentParameteriv(target: Int, attachment: Int, pname: Int, buffer: Buffer[Int]): Unit
 
   def glGetProgramInfoLog(program: Int, maxLength: Int): String
 
@@ -196,7 +188,7 @@ trait GLSpec {
 
   def glPolygonOffset(factor: Float, units: Float): Unit
 
-  def glReadPixels(x: Int, y: Int, width: Int, height: Int, format: Int, tpe: Int): Any
+  def glReadPixels(x: Int, y: Int, width: Int, height: Int, format: Int, tpe: Int, buffer: Buffer[_]): Unit
 
   def glReleaseShaderCompiler(): Unit
 
@@ -206,7 +198,7 @@ trait GLSpec {
 
   def glScissor(x: Int, y: Int, width: Int, height: Int): Unit
 
-  def glShaderBinary(format: Int, data: Array[Byte]): Array[Int]
+  def glShaderBinary(format: Int, shaders: Buffer[Int], binary: Buffer[_]): Unit
 
   def glShaderSource(shader: Int, sources: Array[String]): Unit
 

@@ -2,7 +2,7 @@ package gles
 
 import scala.reflect._
 
-class GL(private[this] val gl: com.jogamp.opengl.GL2ES2) extends GLSpec {
+class GL(private[this] val gl: com.jogamp.opengl.GLES2) extends GLES2 {
 
   private[this] class ArrayProvider[@specialized(Byte, Int) T : ClassTag] {
     private[this] var array = new Array[T](1024)
@@ -68,11 +68,11 @@ class GL(private[this] val gl: com.jogamp.opengl.GL2ES2) extends GLSpec {
   }
 
   def glBufferData(target: Int, size: Long, data: Buffer[_], usage: Int): Unit = {
-    gl.glBufferData(target, size, data, usage)
+    gl.glBufferData(target, size, data.nioBuffer, usage)
   }
 
   def glBufferSubData(target: Int, offset: Long, size: Long, data: Buffer[_]): Unit = {
-    gl.glBufferSubData(target, offset, size, data)
+    gl.glBufferSubData(target, offset, size, data.nioBuffer)
   }
 
   def glCheckFramebufferStatus(target: Int): Int = {
@@ -92,7 +92,7 @@ class GL(private[this] val gl: com.jogamp.opengl.GL2ES2) extends GLSpec {
   }
 
   def glClearStencil(s: Int): Unit = {
-    gl.glClearSentic(s)
+    gl.glClearStencil(s)
   }
 
   def glColorMask(red: Boolean, green: Boolean, blue: Boolean, alpha: Boolean): Unit = {
@@ -148,7 +148,7 @@ class GL(private[this] val gl: com.jogamp.opengl.GL2ES2) extends GLSpec {
   }
 
   def glDeleteRenderbuffers(buffers: Buffer[Int]): Unit = {
-    gl.glDeleteRenderbuffers(bufferes.size, buffers.data, buffers.start)
+    gl.glDeleteRenderbuffers(buffers.size, buffers.data, buffers.start)
   }
 
   def glDeleteShader(shader: Int): Unit = {
@@ -156,7 +156,7 @@ class GL(private[this] val gl: com.jogamp.opengl.GL2ES2) extends GLSpec {
   }
 
   def glDeleteTextures(textures: Buffer[Int]): Unit = {
-    gl.glDeleteTextures(textures.size, textures)
+    gl.glDeleteTextures(textures.size, textures.data, textures.start)
   }
 
   def glDepthFunc(func: Int): Unit = {
@@ -188,7 +188,7 @@ class GL(private[this] val gl: com.jogamp.opengl.GL2ES2) extends GLSpec {
   }
 
   def glDrawElements(mode: Int, count: Int, tpe: Int, indices: Buffer[_]): Unit = {
-    gl.glDrawElements(mode, count, tpe, indices)
+    gl.glDrawElements(mode, count, tpe, indices.nioBuffer)
   }
 
   def glEnable(cap: Int): Unit = {
@@ -258,7 +258,7 @@ class GL(private[this] val gl: com.jogamp.opengl.GL2ES2) extends GLSpec {
     (attributes(1), attributes(2), new String(name, 0, attributes(0)))
   }
 
-  def glGetActiveUniform(program: int, index: Int, bufSize: Int): (Int, Int, String) = {
+  def glGetActiveUniform(program: Int, index: Int, bufSize: Int): (Int, Int, String) = {
     val attributes = intArray.get(3)
     val name = byteArray.get(bufSize)
     gl.glGetActiveUniform(program, index, bufSize, attributes, 0, attributes, 1, attributes, 2, name, 0)
@@ -266,9 +266,9 @@ class GL(private[this] val gl: com.jogamp.opengl.GL2ES2) extends GLSpec {
   }
 
   def glGetAttachedShaders(program: Int, buffer: Buffer[Int]): Int = {
-    val count = java.nio.IntBuffer.allocate(1)
-    gl.glGetAttachedShaders(program, buffer.size, count, buffer)
-    count.get(0)
+    val count = intArray.get(1)
+    gl.glGetAttachedShaders(program, buffer.size, count, 0, buffer.data, buffer.start)
+    count(0)
   }
 
   def glGetAttribLocation(program: Int, name: String): Int = {
@@ -276,7 +276,7 @@ class GL(private[this] val gl: com.jogamp.opengl.GL2ES2) extends GLSpec {
   }
 
   def glGetBufferParameteriv(target: Int, value: Int, buffer: Buffer[Int]): Unit = {
-    gl.glGetBufferParameteriv(target, value, buffer)
+    gl.glGetBufferParameteriv(target, value, buffer.data, buffer.start)
   }
 
   def glGetError(): Int = {
@@ -427,7 +427,7 @@ class GL(private[this] val gl: com.jogamp.opengl.GL2ES2) extends GLSpec {
   }
 
   def glShaderBinary(format: Int, shaders: Buffer[Int], binary: Buffer[_]): Unit = {
-    gl.glShaderBinary(shaders.size, shaders.data, shaders.start, format, binary.nioBuffer)
+    gl.glShaderBinary(shaders.size, shaders.data, shaders.start, format, binary.nioBuffer, binary.size)
   }
 
   def glShaderSource(shader: Int, sources: Array[String]): Unit = {
@@ -462,7 +462,7 @@ class GL(private[this] val gl: com.jogamp.opengl.GL2ES2) extends GLSpec {
 
   def glTexImage2D(target: Int, level: Int, internalformat: Int,
     width: Int, height: Int, border: Int, format: Int, tpe: Int, data: Buffer[_]): Unit = {
-    gl.glTexImage2D(target, level, internalformat, width, height, border, format, tpe, data.nioBuffer
+    gl.glTexImage2D(target, level, internalformat, width, height, border, format, tpe, data.nioBuffer)
   }
 
   def glTexParameteriv(target: Int, param: Int, value: Buffer[Int]): Unit = {
@@ -511,9 +511,9 @@ class GL(private[this] val gl: com.jogamp.opengl.GL2ES2) extends GLSpec {
   }
 
   def glVertexAttrib1f(index: Int, x: Float): Unit = gl.glVertexAttrib1f(index, x)
-  def glVertexAttrib2f(index: Int, x: Float, y: Float): Unit = gl.glVertexAttrib1f(index, x, y)
-  def glVertexAttrib3f(index: Int, x: Float, y: Float, z: Float): Unit = gl.glVertexAttrib1f(index, x, y, z)
-  def glVertexAttrib4f(index: Int, x: Float, y: Float, z: Float, w: Float): Unit = gl.glVertexAttrib1f(index, x, y, z, w)
+  def glVertexAttrib2f(index: Int, x: Float, y: Float): Unit = gl.glVertexAttrib2f(index, x, y)
+  def glVertexAttrib3f(index: Int, x: Float, y: Float, z: Float): Unit = gl.glVertexAttrib3f(index, x, y, z)
+  def glVertexAttrib4f(index: Int, x: Float, y: Float, z: Float, w: Float): Unit = gl.glVertexAttrib4f(index, x, y, z, w)
 
   def glVertexAttrib1fv(index: Int, buffer: Buffer[Float]): Unit = gl.glVertexAttrib1fv(index, buffer.data, buffer.start)
   def glVertexAttrib2fv(index: Int, buffer: Buffer[Float]): Unit = gl.glVertexAttrib2fv(index, buffer.data, buffer.start)

@@ -1,2 +1,6 @@
-# Vim files
+# vim
 *.swp
+
+# sbt
+target
+/project/build
