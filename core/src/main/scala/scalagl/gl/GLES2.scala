@@ -26,9 +26,11 @@ trait GLES2 {
 
   def glBlendFuncSeparate(rgbSrc: Int, rgbDst: Int, alphaSrc: Int, alphaDst: Int): Unit
 
-  def glBufferData(target: Int, size: Long, data: Buffer[_], usage: Int): Unit
+  def glBufferData(target: Int, size: Long, usage: Int): Unit
 
-  def glBufferSubData(target: Int, offset: Long, size: Long, data: Buffer[_]): Unit
+  def glBufferData(target: Int, data: Buffer[_], usage: Int): Unit
+
+  def glBufferSubData(target: Int, offset: Long, data: Buffer[_]): Unit
 
   def glCheckFramebufferStatus(target: Int): Int
 
@@ -45,7 +47,13 @@ trait GLES2 {
   def glCompileShader(shader: Int): Unit
 
   def glCompressedTexImage2D(target: Int, level: Int, format: Int,
+                             width: Int, height: Int, border: Int, imageSize: Int, pointer: Long): Unit
+
+  def glCompressedTexImage2D(target: Int, level: Int, format: Int,
                              width: Int, height: Int, border: Int, imageSize: Int, data: Buffer[_]): Unit
+
+  def glCompressedTexSubImage2D(target: Int, level: Int, xoffset: Int, yoffset: Int,
+                                width: Int, height: Int, format: Int, imageSize: Int, pointer: Long): Unit
 
   def glCompressedTexSubImage2D(target: Int, level: Int, xoffset: Int, yoffset: Int,
                                 width: Int, height: Int, format: Int, imageSize: Int, data: Buffer[_]): Unit
@@ -87,6 +95,8 @@ trait GLES2 {
   def glDisableVertexAttribArray(index: Int): Unit
 
   def glDrawArrays(mode: Int, first: Int, count: Int): Unit
+
+  def glDrawElements(mode: Int, count: Int, tpe: Int, indices: Long): Unit
 
   def glDrawElements(mode: Int, count: Int, tpe: Int, indices: Buffer[_]): Unit
 

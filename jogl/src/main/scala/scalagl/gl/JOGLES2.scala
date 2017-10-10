@@ -1,6 +1,7 @@
 package scalagl.gl
 
 import scala.reflect._
+import JavaNioConversions._
 
 class JOGLES2(private[scalagl] var gl: com.jogamp.opengl.GLES2) extends GLES2 {
 
@@ -67,12 +68,16 @@ class JOGLES2(private[scalagl] var gl: com.jogamp.opengl.GLES2) extends GLES2 {
     gl.glBlendFuncSeparate(rgbSrc, rgbDst, alphaSrc, alphaDst)
   }
 
-  def glBufferData(target: Int, size: Long, data: Buffer[_], usage: Int): Unit = {
-    gl.glBufferData(target, size, data.nioBuffer, usage)
+  def glBufferData(target: Int, size: Long, usage: Int): Unit = {
+    gl.glBufferData(target, size, null, usage)
   }
 
-  def glBufferSubData(target: Int, offset: Long, size: Long, data: Buffer[_]): Unit = {
-    gl.glBufferSubData(target, offset, size, data.nioBuffer)
+  def glBufferData(target: Int, data: Buffer[_], usage: Int): Unit = {
+    gl.glBufferData(target, data.size, data, usage)
+  }
+
+  def glBufferSubData(target: Int, offset: Long, data: Buffer[_]): Unit = {
+    gl.glBufferSubData(target, offset, data.size, data)
   }
 
   def glCheckFramebufferStatus(target: Int): Int = {
@@ -104,13 +109,23 @@ class JOGLES2(private[scalagl] var gl: com.jogamp.opengl.GLES2) extends GLES2 {
   }
 
   def glCompressedTexImage2D(target: Int, level: Int, format: Int,
+    width: Int, height: Int, border: Int, imageSize: Int, pointer: Long): Unit = {
+    gl.glCompressedTexImage2D(target, level, format, width, height, border, imageSize, pointer)
+  }
+
+  def glCompressedTexImage2D(target: Int, level: Int, format: Int,
     width: Int, height: Int, border: Int, imageSize: Int, data: Buffer[_]): Unit = {
-    gl.glCompressedTexImage2D(target, level, format, width, height, border, imageSize, data.nioBuffer)
+    gl.glCompressedTexImage2D(target, level, format, width, height, border, imageSize, data)
+  }
+
+  def glCompressedTexSubImage2D(target: Int, level: Int, xoffset: Int, yoffset: Int,
+    width: Int, height: Int, format: Int, imageSize: Int, pointer: Long): Unit = {
+    gl.glCompressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, imageSize, pointer)
   }
 
   def glCompressedTexSubImage2D(target: Int, level: Int, xoffset: Int, yoffset: Int,
     width: Int, height: Int, format: Int, imageSize: Int, data: Buffer[_]): Unit = {
-    gl.glCompressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, imageSize, data.nioBuffer)
+    gl.glCompressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, imageSize, data)
   }
 
   def glCopyTexImage2D(target: Int, level: Int, format: Int, x: Int, y: Int,
@@ -187,8 +202,12 @@ class JOGLES2(private[scalagl] var gl: com.jogamp.opengl.GLES2) extends GLES2 {
     gl.glDrawArrays(mode, first, count)
   }
 
+  def glDrawElements(mode: Int, count: Int, tpe: Int, indices: Long): Unit = {
+    gl.glDrawElements(mode, count, tpe, indices)
+  }
+
   def glDrawElements(mode: Int, count: Int, tpe: Int, indices: Buffer[_]): Unit = {
-    gl.glDrawElements(mode, count, tpe, indices.nioBuffer)
+    gl.glDrawElements(mode, count, tpe, indices)
   }
 
   def glEnable(cap: Int): Unit = {
@@ -407,7 +426,7 @@ class JOGLES2(private[scalagl] var gl: com.jogamp.opengl.GLES2) extends GLES2 {
   }
 
   def glReadPixels(x: Int, y: Int, width: Int, height: Int, format: Int, tpe: Int, buffer: Buffer[_]): Unit = {
-    gl.glReadPixels(x, y, width, height, format, tpe, buffer.nioBuffer)
+    gl.glReadPixels(x, y, width, height, format, tpe, buffer)
   }
 
   def glReleaseShaderCompiler(): Unit = {
@@ -427,7 +446,7 @@ class JOGLES2(private[scalagl] var gl: com.jogamp.opengl.GLES2) extends GLES2 {
   }
 
   def glShaderBinary(format: Int, shaders: Buffer[Int], binary: Buffer[_]): Unit = {
-    gl.glShaderBinary(shaders.size, shaders.data, shaders.start, format, binary.nioBuffer, binary.size)
+    gl.glShaderBinary(shaders.size, shaders.data, shaders.start, format, binary, binary.size)
   }
 
   def glShaderSource(shader: Int, sources: Array[String]): Unit = {
@@ -462,7 +481,7 @@ class JOGLES2(private[scalagl] var gl: com.jogamp.opengl.GLES2) extends GLES2 {
 
   def glTexImage2D(target: Int, level: Int, internalformat: Int,
     width: Int, height: Int, border: Int, format: Int, tpe: Int, data: Buffer[_]): Unit = {
-    gl.glTexImage2D(target, level, internalformat, width, height, border, format, tpe, data.nioBuffer)
+    gl.glTexImage2D(target, level, internalformat, width, height, border, format, tpe, data)
   }
 
   def glTexParameteriv(target: Int, param: Int, value: Buffer[Int]): Unit = {
@@ -475,7 +494,7 @@ class JOGLES2(private[scalagl] var gl: com.jogamp.opengl.GLES2) extends GLES2 {
 
   def glTexSubImage2D(target: Int, level: Int, xoffset: Int, yoffset: Int,
     width: Int, height: Int, format: Int, tpe: Int, data: Buffer[_]): Unit = {
-    gl.glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, tpe, data.nioBuffer)
+    gl.glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, tpe, data)
   }
 
   def glUniform1i(location: Int, x: Int): Unit = gl.glUniform1i(location, x)
