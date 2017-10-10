@@ -1,12 +1,13 @@
 
 lazy val commonSettings = Seq(
   version := "0.1",
-  scalaVersion := "2.11.8",
+  scalaVersion := "2.11.11",
   scalacOptions ++= Seq(
     "-deprecation",
     "-unchecked",
     "-optimise",
-    "-feature"
+    "-feature",
+    "-Yinline-warnings"
   )
 )
 
@@ -23,7 +24,15 @@ lazy val jogl = (project in file("jogl"))
   .settings(commonSettings)
   .dependsOn(core)
 
+lazy val lwjgl = (project in file("lwjgl"))
+  .settings(
+    name := "scalagl-lwjgl",
+    libraryDependencies += "org.lwjgl" % "lwjgl" % "3.1.0",
+    libraryDependencies += "org.lwjgl" % "lwjgl-opengles" % "3.1.0")
+  .settings(commonSettings)
+  .dependsOn(core)
+
 lazy val root = (project in file("."))
   .settings(commonSettings)
-  .dependsOn(jogl)
-  .aggregate(core, jogl)
+  .dependsOn(jogl, lwjgl)
+  .aggregate(core, jogl, lwjgl)
